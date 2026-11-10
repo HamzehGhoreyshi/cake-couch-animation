@@ -62,12 +62,13 @@ svg { overflow: visible; }
 /* headline strip: old text slides out left while the new one follows it in */
 .hclip { left: 0; top: calc(var(--u)*86); width: calc(var(--u)*236); height: calc(var(--u)*130); overflow: hidden;
   -webkit-mask: linear-gradient(90deg, #000 88%, transparent); mask: linear-gradient(90deg, #000 88%, transparent); }
-.ht { left: calc(var(--u)*78); top: 0; margin: 0; color: #fff; font-weight: 700; white-space: nowrap;
+.ht { left: calc(var(--u)*62); top: 0; margin: 0; color: #fff; font-weight: 700; white-space: nowrap;
   font-size: calc(var(--u)*55); line-height: .96; letter-spacing: -.01em;
   transform: translateX(var(--d)); visibility: hidden; will-change: transform; }
-.ht.cur, .ht.old { visibility: visible; transition: transform 1.15s var(--ease); }
-.ht.cur { transform: none; }
-.ht.old { transform: translateX(calc(var(--d) * -1)); }
+.ht.cur, .ht.old { visibility: visible; transition: transform 1.15s var(--ease), opacity .35s ease; }
+.ht.cur { transform: none; opacity: 1; }
+/* old words slide out left, then fade so no letters are left stranded at the card edge */
+.ht.old { transform: translateX(calc(var(--d) * -1)); opacity: 0; transition: transform 1.15s var(--ease), opacity .3s ease .8s; }
 
 /* hero objects ride a hidden circle: the outer wrapper rotates around one shared pivot
    (--px/--py = pivot minus the object's own position), so every object travels on an arc
