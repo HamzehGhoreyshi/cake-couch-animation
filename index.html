@@ -283,7 +283,10 @@ svg { overflow: visible; }
   <radialGradient id="gCloud" cx=".45" cy=".3" r=".8"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#f4f4f6"/><stop offset="1" stop-color="#c9c8d0"/></radialGradient>
   <linearGradient id="gBean" x1="0" y1="0" x2=".6" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#f4f4f8"/><stop offset="1" stop-color="#c8c8d6"/></linearGradient>
   <!-- thumbnails -->
+  <linearGradient id="gRed" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff5a46"/><stop offset=".6" stop-color="#e5281f"/><stop offset="1" stop-color="#b8161a"/></linearGradient>
+  <linearGradient id="gBlue" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2b6fe8"/><stop offset=".4" stop-color="#4b8cff"/><stop offset="1" stop-color="#1a4fc0"/></linearGradient>
   <linearGradient id="gTeal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#11a191"/><stop offset=".45" stop-color="#3fd0bc"/><stop offset="1" stop-color="#0c7d72"/></linearGradient>
+  <linearGradient id="gCoral" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9d8e"/><stop offset="1" stop-color="#ec5a52"/></linearGradient>
 
   <symbol id="s-sofa" viewBox="0 0 210 124">
     <ellipse cx="108" cy="114" rx="96" ry="9" fill="url(#gShadow)"/>
@@ -354,8 +357,6 @@ svg { overflow: visible; }
     </g>
     <path d="M8 120A38 5 0 0 0 84 120H80A34 3.4 0 0 1 12 120.5Z" fill="#ddd6c8"/>
   </symbol>
-  <symbol id="s-gold" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="url(#gGold)"/></symbol>
-  <symbol id="s-pinkb" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="url(#gPink)"/></symbol>
   <symbol id="s-cloud" viewBox="0 0 160 90">
     <path d="M18 80C2 80 2 58 20 56C18 36 40 28 54 38C60 16 96 12 106 36C122 28 142 40 136 58C154 60 156 80 138 82Z" fill="url(#gCloud)"/>
   </symbol>
@@ -363,6 +364,27 @@ svg { overflow: visible; }
     <ellipse cx="34" cy="44" rx="26" ry="5" fill="#1d1030" opacity=".12" filter="url(#b3)"/>
     <path d="M9 40C1 32 7 19 21 17C33 15 38 6 51 6C64 6 69 18 61 29C51 42 22 50 9 40Z" fill="url(#gBean)"/>
     <path d="M44 11C52 9 60 12 60 18" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/>
+  </symbol>
+  <symbol id="t-puri" viewBox="0 0 44 52">
+    <ellipse cx="22" cy="46" rx="13" ry="3" fill="url(#gShadow)"/>
+    <path d="M27 5l5 3v35l-5 2Z" fill="#9e1614"/><rect x="13" y="4" width="15" height="42" rx="2" fill="url(#gRed)"/>
+    <path d="M17 8v34" stroke="#ff8a7a" stroke-width="1.6" opacity=".7"/>
+  </symbol>
+  <symbol id="t-chair" viewBox="0 0 44 52">
+    <ellipse cx="22" cy="48" rx="15" ry="3" fill="url(#gShadow)"/>
+    <path d="M10 26v21M34 26v21M14 28v14M30 28v14M10 40h24" stroke="#a5653c" stroke-width="2" stroke-linecap="round"/>
+    <path d="M12 8h18l2 16H12Z" fill="#d9b48c"/><path d="M8 24h28l-1 6H9Z" fill="#c99868"/><path d="M12 8h18v3H12Z" fill="#f0d2ac"/>
+  </symbol>
+  <symbol id="t-coral" viewBox="0 0 44 52">
+    <ellipse cx="22" cy="48" rx="14" ry="3" fill="url(#gShadow)"/>
+    <path d="M12 6h14a3 3 0 0 1 3 3v17h5a3 3 0 0 1 3 3v17h-6V34H15v12H9V9a3 3 0 0 1 3-3Z" fill="url(#gCoral)"/>
+    <path d="M15 10h10v16H15Z" fill="#c8403c" opacity=".35"/>
+  </symbol>
+  <symbol id="t-pack" viewBox="0 0 44 52">
+    <ellipse cx="22" cy="40" rx="18" ry="5" fill="url(#gShadow)"/>
+    <path d="M3 24v9c0 4 8 7 19 7s19-3 19-7v-9Z" fill="url(#gBlue)"/>
+    <path d="M3 24c0-3 3-2 4-5s4-1 6-3 5 1 9-1 6 0 8 2 5 1 6 4 4 1 4 4c0 5-8 8-19 8S3 29 3 24Z" fill="#3f86ff"/>
+    <ellipse cx="22" cy="23" rx="11" ry="3.4" fill="#1c55c8"/>
   </symbol>
   <symbol id="t-lamp" viewBox="0 0 44 52">
     <ellipse cx="22" cy="47" rx="11" ry="2.6" fill="url(#gShadow)"/>
@@ -380,12 +402,12 @@ svg { overflow: visible; }
 /* ---------- data: the only place content lives ---------- */
 /* hero items: [symbol, x, y, w, h, rotate, blur(0|3|5), depth k, delay s] in 710x482 card units */
 const THEMES = [
-  { name: ["Sofa", "cake"], c1: "#b862f8", c2: "#6a30f0", icon: "i-sofa",    rows: [["Sofa cake", "s-sofa"], ["Layer stool", "s-stool"], ["Cushion", "s-pillow"]],
+  { name: ["Sofa", "cake"], c1: "#b862f8", c2: "#6a30f0", icon: "i-sofa",    rows: [["Worktop", "s-stool"], ["Couch capsule", "s-pillow"], ["Couch cake", "s-sofa"]],
     hero: [["s-stool", 128, 192, 108, 120, -4, 3, 1.25, .1], ["s-sofa", 176, 128, 212, 125, 0, 0, 1, 0], ["s-pillow", 210, -38, 88, 88, 18, 5, 1.4, .16]] },
-  { name: ["Blob", "sofa"], c1: "#ffd65e", c2: "#f5a03a", icon: "i-pod",    rows: [["Blob sofa", "s-knot"], ["Brass orb", "s-gold"], ["Ball pouf", "s-pinkb"]],
+  { name: ["Blob", "sofa"], c1: "#ffd65e", c2: "#f5a03a", icon: "i-pod",    rows: [["Purifier O2", "t-puri"], ["Copse combo", "t-chair"], ["Bouncy prop", "t-coral"]],
     hero: [["s-knot", 176, 106, 216, 181, -9, 0, 1, 0], ["s-gold", 116, 216, 90, 90, 0, 3, 1.3, .1], ["s-pinkb", 196, 4, 72, 72, 0, 5, 1.45, .18]] },
-  { name: ["Snake", "plant"], c1: "#4cefd6", c2: "#18d4b6", icon: "i-box",    rows: [["Snake plant", "s-plant"], ["Cloud pouf", "s-cloud"], ["Mushroom lamp", "t-lamp"]],
-    hero: [["s-plant", 184, 66, 90, 264, 0, 0, 1, 0], ["s-cloud", 50, 252, 146, 84, 0, 5, 1.3, .12], ["t-lamp", 214, 14, 76, 90, 10, 5, 1.45, .18]] }
+  { name: ["Herbs", "pods"], c1: "#4cefd6", c2: "#18d4b6", icon: "i-box",    rows: [["Herbs pods", "s-plant"], ["Garden pack", "t-pack"], ["Outdoor light", "t-lamp"]],
+    hero: [["s-plant", 184, 66, 90, 264, 0, 0, 1, 0], ["s-cloud", 50, 252, 146, 84, 0, 5, 1.3, .12]] }
 ];
 
 /* centre of the hidden circle the hero objects orbit, in card units */
@@ -396,6 +418,7 @@ const card = $("card"), head = $("head"), hero = $("hero"), rows = $("rows"), st
 const reduce = matchMedia("(prefers-reduced-motion: reduce)");
 const u = n => `calc(var(--u)*${n})`;
 const sym = (id, blur, rot) => {
+  if (id === "s-gold" || id === "s-pinkb") return `<svg viewBox="0 0 100 100"><g filter="url(#b${blur})"><circle cx="50" cy="50" r="46" fill="url(#g${id === "s-gold" ? "Gold" : "Pink"})"/></g></svg>`;
   const use = `<use href="#${id}" width="100%" height="100%"${rot ? ` style="transform:rotate(${rot}deg);transform-origin:50% 50%;transform-box:view-box"` : ""}/>`;
   return `<svg>${blur ? `<g filter="url(#b${blur})">${use}</g>` : use}</svg>`;
 };
