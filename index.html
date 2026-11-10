@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cake Couch</title>
+<meta name="description" content="A dependency-free animated product showcase in HTML, CSS and SVG. Inspired by Cake Couch by Cosmin Capitanu.">
+<meta name="theme-color" content="#e2e2e3">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%237a3df2'/%3E%3Crect x='6' y='11' width='20' height='11' rx='5.5' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+@property --c1 { syntax: "<color>"; inherits: true; initial-value: #b45ff8; }
+@property --c2 { syntax: "<color>"; inherits: true; initial-value: #6b32f0; }
+:root {
+  --ink: #1b1b1f; --muted: #6f6e72; --page: #e2e2e3;
+  --ease: cubic-bezier(.65, 0, .25, 1);
+  --font: "Avenir Next", "Avenir", "Century Gothic", "Futura", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { overflow-x: clip; }
+html { color-scheme: light; }
+body {
+  margin: 0; min-height: 100svh; display: grid; place-items: center; padding: 24px 16px;
+  background: radial-gradient(90% 70% at 50% 40%, #ececed, var(--page)); color: var(--ink);
+  font: 500 15px/1.3 var(--font); -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; padding: 0; }
+:focus-visible { outline: 2px solid #5723ec; outline-offset: 3px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.wrap { width: 100%; container-type: inline-size; display: grid; justify-items: center; }
+
+/* ---------- card: everything is placed in 710 x 482 design units ---------- */
+.card {
+  --u: calc(min(100cqw, 1080px) / 710);
+  position: relative; width: calc(var(--u) * 710); height: calc(var(--u) * 482);
+  border-radius: calc(var(--u) * 40); isolation: isolate;
+  background: linear-gradient(180deg, #fff 55%, #f4f4f5);
+  box-shadow: 0 calc(var(--u)*40) calc(var(--u)*70) calc(var(--u)*-34) rgba(30, 20, 50, .28), 0 1px 0 #fff inset;
+  transition: --c1 1.2s var(--ease), --c2 1.2s var(--ease);
+}
+@media (min-height: 400px) { .card { --u: calc(min(100cqw, 1080px, (100svh - 110px) * 1.473) / 710); } }
+.card * { position: absolute; }
+.card br { position: static; }
+svg { overflow: visible; }
+
+/* BACKGROUND = one big rounded pentagon that turns about the same hidden centre as the objects.
+   The card clips it, so you only ever see part of it: that is why the visible blob keeps changing
+   outline while it rotates 144deg per theme. A pentagon looks identical every 72deg, so each
+   theme rests on the same silhouette. Sway = tiny idle wobble so it is never still. */
+.bclip { left: 0; top: 0; width: 100%; height: 100%; border-radius: inherit; overflow: hidden; pointer-events: none; }
+.bclip svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+#bsq { transform-origin: 104px 128px; will-change: transform; transition: transform 1.25s cubic-bezier(.6, 0, .2, 1); }
+.sway { transform-origin: 104px 128px; animation: sway 5.5s ease-in-out infinite alternate; }
+@keyframes sway { from { transform: rotate(-2.4deg); } to { transform: rotate(2.4deg); } }
+.glow { left: calc(var(--u)*200); top: calc(var(--u)*60); width: calc(var(--u)*330); height: calc(var(--u)*330); pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--c2) 16%, transparent), transparent); }
+.bshade { left: calc(var(--u)*10); top: calc(var(--u)*330); width: calc(var(--u)*330); height: calc(var(--u)*120);
+  background: radial-gradient(closest-side, rgba(40, 30, 60, .09), transparent); }
+
+.logo { left: calc(var(--u)*78); top: calc(var(--u)*48); width: calc(var(--u)*13); }
+.smile { left: calc(var(--u)*634); top: calc(var(--u)*39); width: calc(var(--u)*32); }
+
+/* headline strip: old text slides out left while the new one follows it in */
+.hclip { left: 0; top: calc(var(--u)*86); width: calc(var(--u)*236); height: calc(var(--u)*130); overflow: hidden;
+  -webkit-mask: linear-gradient(90deg, #000 88%, transparent); mask: linear-gradient(90deg, #000 88%, transparent); }
+.ht { left: calc(var(--u)*78); top: 0; margin: 0; color: #fff; font-weight: 700; white-space: nowrap;
+  font-size: calc(var(--u)*55); line-height: .96; letter-spacing: -.01em;
+  transform: translateX(var(--d)); visibility: hidden; will-change: transform; }
+.ht.cur, .ht.old { visibility: visible; transition: transform 1.15s var(--ease); }
+.ht.cur { transform: none; }
+.ht.old { transform: translateX(calc(var(--d) * -1)); }
+
+/* hero objects ride a hidden circle: the outer wrapper rotates around one shared pivot
+   (--px/--py = pivot minus the object's own position), so every object travels on an arc
+   of the same wheel. Clockwise always: enter from the top, leave past the bottom-left.
+   The inner div counter-spins a little so objects tumble instead of turning upside down. */
+.hero { left: 0; top: 0; width: calc(var(--u)*400); height: calc(var(--u)*362); z-index: 2; pointer-events: none; }
+.bean { left: calc(var(--u)*44); top: calc(var(--u)*222); width: calc(var(--u)*56); }
+.o { visibility: hidden; will-change: transform; --a: calc(var(--k, 1) * 150deg);
+  transform-origin: calc(var(--u) * var(--px)) calc(var(--u) * var(--py)); }
+.o > div, .o svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.o > div { will-change: transform; }
+.o.cur, .o.old { visibility: visible; }
+/* easing: enter = long expo-out settle, exit = soft ease-in-out that drifts away
+   while it shrinks, blurs and fades (no sudden pop) */
+.o.cur, .o.cur > div { animation: orbitIn 1.25s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--dl, 0s) + .2s); }
+.o.cur > div { animation-name: spinIn; }
+.o.old, .o.old > div { animation: orbitOut 1s cubic-bezier(.55, 0, .6, .6) both; animation-delay: calc(var(--dl, 0s) * .5); }
+.o.old > div { animation-name: spinOut; }
+.o svg { animation: float 6s ease-in-out infinite; animation-delay: var(--fd, 0s); will-change: transform; }
+/* measured from the shot: new set swings in from about -150deg, old set leaves about +165deg */
+@keyframes orbitIn { from { transform: rotate(calc(var(--a) * -1)); opacity: 0; } 25% { opacity: 1; } }
+@keyframes orbitOut { 55% { opacity: 1; } to { transform: rotate(calc(var(--a) * 1.1)); opacity: 0; } }
+/* inner div counter-rotates ~88% so objects stay nearly upright while they travel (the shot tilts them only slightly) */
+@keyframes spinIn { from { transform: rotate(calc(var(--a) * .88)); } }
+@keyframes spinOut { to { transform: rotate(calc(var(--a) * -.88)); } }
+@keyframes float { 50% { transform: translateY(calc(var(--u) * -5)) rotate(var(--fr, 1deg)); } }
+
+/* storehouse list */
+.store { left: calc(var(--u)*380); top: calc(var(--u)*100); width: calc(var(--u)*330); height: calc(var(--u)*290); }
+.store h2 { left: calc(var(--u)*28); top: 0; margin: 0; font-weight: 500; font-size: calc(var(--u)*27); line-height: 1.15; letter-spacing: .005em; }
+.cols { left: calc(var(--u)*28); right: calc(var(--u)*50); top: calc(var(--u)*91); display: flex; justify-content: space-between;
+  font-size: calc(var(--u)*7); font-weight: 600; letter-spacing: .1em; color: #3a3a40; }
+.cols span { position: static; }
+.rows { left: 0; top: calc(var(--u)*125); width: 100%; height: calc(var(--u)*165); margin: 0; padding: 0; list-style: none; }
+.rows li { left: calc(var(--u)*-90); right: 0; height: calc(var(--u)*55); }
+.rows li:nth-child(1) { top: 0; background: linear-gradient(90deg, rgba(240,240,242,0), #f0f0f2 32%); }
+.rows li:nth-child(2) { top: calc(var(--u)*55); background: linear-gradient(90deg, rgba(244,244,246,0), #f5f5f7 32%); }
+.rows li:nth-child(3) { top: calc(var(--u)*110); background: linear-gradient(90deg, rgba(250,250,251,0), #fafafb 32%); }
+.win { left: calc(var(--u)*110); width: calc(var(--u)*242); top: calc(var(--u)*-8); height: calc(var(--u)*66); overflow: hidden; }
+.seg { inset: 0; transform: translateX(100%); visibility: hidden; will-change: transform; }
+.seg.cur, .seg.old { visibility: visible; transition: transform 1.05s var(--ease); transition-delay: var(--sd, 0s); }
+.seg.cur { transform: none; }
+.seg.old { transform: translateX(-100%); }
+.rows li:nth-child(2) .seg { --sd: .06s; }
+.rows li:nth-child(3) .seg { --sd: .12s; }
+.seg b { left: calc(var(--u)*8); top: calc(var(--u)*25); font-weight: 500; font-size: calc(var(--u)*11.2); white-space: nowrap; color: #232327; }
+.seg em { left: calc(var(--u)*131); top: calc(var(--u)*28); font-style: normal; font-weight: 500; font-size: calc(var(--u)*6.8); letter-spacing: .02em; color: #3a3a40; white-space: nowrap; }
+.seg svg { left: calc(var(--u)*190); top: calc(var(--u)*6); width: calc(var(--u)*44); height: calc(var(--u)*52); }
+.plus { right: calc(var(--u)*45); top: calc(var(--u)*17); font-size: calc(var(--u)*15); font-weight: 400; line-height: 1; color: #222; }
+
+/* bottom controls */
+.dock { left: calc(var(--u)*308); top: calc(var(--u)*372); width: calc(var(--u)*222); height: calc(var(--u)*54); border-radius: 99px;
+  background: rgba(255,255,255,.96); box-shadow: 0 calc(var(--u)*14) calc(var(--u)*30) calc(var(--u)*-8) rgba(30,20,50,.18), 0 0 0 1px rgba(0,0,0,.025); }
+.dock .ic { top: calc(var(--u)*18); width: calc(var(--u)*18); height: calc(var(--u)*18); }
+.dock hr { left: calc(var(--u)*152); top: calc(var(--u)*15); width: 1px; height: calc(var(--u)*24); margin: 0; border: 0; background: #e6e6e9; }
+#next { left: calc(var(--u)*170); top: calc(var(--u)*5); width: calc(var(--u)*44); height: calc(var(--u)*44); border-radius: 50%;
+  background: #2b2b30; color: #fff; display: grid; place-items: center; box-shadow: 0 6px 14px -6px rgba(0,0,0,.5); transition: transform .2s; }
+#next:hover { transform: scale(1.06); }
+#next:active { transform: scale(.94); }
+#next svg { position: static; width: calc(var(--u)*14); height: calc(var(--u)*14); }
+#steps { left: calc(var(--u)*35); top: calc(var(--u)*405); height: calc(var(--u)*42); width: calc(var(--u)*170); }
+#steps button { top: 0; width: calc(var(--u)*42); height: calc(var(--u)*42); border-radius: calc(var(--u)*12);
+  display: grid; place-items: center; color: #5d5d63; transition: background-color .35s; }
+#steps button:nth-of-type(2) { left: calc(var(--u)*68); }
+#steps button:nth-of-type(3) { left: calc(var(--u)*127); }
+#steps button[aria-pressed="true"] { background: #e9e9eb; color: #2b2b30; }
+#steps i { top: calc(var(--u)*20.5); width: calc(var(--u)*11); height: 1px; background: #b9b9bf; }
+#steps i:nth-of-type(1) { left: calc(var(--u)*50); }
+#steps i:nth-of-type(2) { left: calc(var(--u)*110); }
+#play { left: calc(var(--u)*632); top: calc(var(--u)*405); width: calc(var(--u)*42); height: calc(var(--u)*42); border-radius: calc(var(--u)*12);
+  background: #ececee; display: grid; place-items: center; color: #3b3b40; }
+#steps svg, #play svg { position: static; width: calc(var(--u)*17); height: calc(var(--u)*17); }
+.ln { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+.credit { margin: 20px 0 0; font-size: 12px; color: var(--muted); text-align: center; }
+.credit a { color: inherit; }
+
+/* signature footer (same pattern as my other projects) */
+.sig { width: min(100%, 760px); margin-top: 10px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; font-size: 12px; color: var(--muted); }
+.sig a { display: inline-flex; align-items: center; gap: 6px; height: 20px; color: inherit; text-decoration: none; border-radius: 6px; transition: opacity .2s; }
+.sig a:hover { opacity: .7; }
+.sig strong { color: #3a3a40; font-weight: 600; }
+.sig svg { display: block; flex: none; width: 13px; height: 13px; fill: #3a3a40; }
+.sig .star-icon { fill: #f5a03a; }
+.sig .start { justify-self: start; }
+.sig .mid { justify-self: center; display: inline-flex; align-items: center; height: 20px; }
+.sig .end { justify-self: end; display: inline-flex; align-items: center; gap: 10px; height: 20px; }
+.sig .dot { opacity: .5; }
+@media (max-width: 640px) { .sig { grid-template-columns: 1fr; justify-items: center; gap: 8px; margin-top: 6px; } .sig .start, .sig .mid, .sig .end { justify-self: center; } }
+
+/* ---------- phone: blob on top, list below (343 design units wide) ---------- */
+@media (max-width: 640px) {
+  body { padding: 16px; place-items: start center; }
+  .card { --u: calc(100cqw / 343); width: 100%; height: calc(var(--u)*742); border-radius: calc(var(--u)*30); background: #fff; }
+  .bclip { height: calc(var(--u)*300); border-radius: calc(var(--u)*30) calc(var(--u)*30) 0 0; }
+  .glow { left: calc(var(--u)*40); top: calc(var(--u)*170); width: calc(var(--u)*280); height: calc(var(--u)*240); }
+  .bshade { top: calc(var(--u)*270); }
+  .logo { left: calc(var(--u)*26); top: calc(var(--u)*30); }
+  .smile { left: calc(var(--u)*289); top: calc(var(--u)*22); }
+  .hclip { top: calc(var(--u)*70); width: calc(var(--u)*170); -webkit-mask: none; mask: none; }
+  .ht { left: calc(var(--u)*24); font-size: calc(var(--u)*42); }
+  .hero { left: calc(var(--u)*-40); top: calc(var(--u)*24); transform: scale(.72); transform-origin: 100% 0; }
+  .bean { left: calc(var(--u)*30); top: calc(var(--u)*200); }
+  .store { left: 0; top: calc(var(--u)*322); width: calc(var(--u)*343); }
+  .store h2 { left: calc(var(--u)*20); }
+  .cols { left: calc(var(--u)*20); right: calc(var(--u)*30); top: calc(var(--u)*82); }
+  .rows { top: calc(var(--u)*112); }
+  .rows li { left: 0; }
+  .win { left: calc(var(--u)*12); width: calc(var(--u)*268); }
+  .seg em { left: calc(var(--u)*140); }
+  .seg svg { left: calc(var(--u)*212); }
+  .plus { right: calc(var(--u)*26); }
+  .dock { left: calc(var(--u)*60); top: calc(var(--u)*596); }
+  #steps { left: calc(var(--u)*18); top: calc(var(--u)*680); }
+  #play { left: calc(var(--u)*283); top: calc(var(--u)*680); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .o.cur, .o.old, .o > div, .o svg, .sway { animation: none !important; }
+  #bsq { transition: none; }
+  .o.old { visibility: hidden; }
+  .ht, .seg { transition: none !important; }
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="card" id="card" aria-roledescription="carousel" aria-label="My storehouse collections">
+    <div class="bshade" aria-hidden="true"></div>
+    <div class="bclip" aria-hidden="true">
+      <!-- gradient stays fixed (light top-left); only the square that masks it rotates -->
+      <svg id="blob" viewBox="0 0 710 482" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="bg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="310" y2="362"><stop offset="0" style="stop-color:var(--c1)"/><stop offset="1" style="stop-color:var(--c2)"/></linearGradient>
+          <mask id="bmask" maskUnits="userSpaceOnUse" x="-50" y="-50" width="860" height="700"><g class="sway"><polygon id="bsq" fill="#fff" stroke="#fff" stroke-linejoin="round"/></g></mask>
+        </defs>
+        <rect x="-50" y="-50" width="860" height="700" fill="url(#bg)" mask="url(#bmask)"/>
+      </svg>
+    </div>
+    <div class="glow" aria-hidden="true"></div>
+    <svg class="logo" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5 2 12.5h10Z M7 6.5 4.6 12.2" fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    <svg class="smile" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="url(#gSm)"/><path d="M8 15c2 6 13 7 16 0z" fill="#3a2a1c" transform="rotate(-14 16 16)"/><circle cx="10" cy="11" r="1.7" fill="#3a2a1c"/><circle cx="21" cy="9" r="1.7" fill="#3a2a1c"/></svg>
+
+    <div class="hclip" id="head" aria-live="polite"></div>
+    <svg class="bean" viewBox="0 0 70 52" aria-hidden="true"><use href="#s-bean"/></svg>
+    <div class="hero" id="hero" aria-hidden="true"></div>
+
+    <div class="store">
+      <h2>My<br>storehouse</h2>
+      <div class="cols" aria-hidden="true"><span>PRODUCT</span><span>NO</span></div>
+      <ul class="rows" id="rows"></ul>
+    </div>
+
+    <div class="dock">
+      <svg class="ic ln" style="left:calc(var(--u)*32)" viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="7" width="16" height="6" rx="1.5"/><path d="M6 7v2.5M10 7v2.5M14 7v2.5"/></svg>
+      <svg class="ic ln" style="left:calc(var(--u)*68);color:#8b5cf6" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16.5l.8-3.6 9-9 2.8 2.8-9 9zM3 18h14"/></svg>
+      <svg class="ic ln" style="left:calc(var(--u)*102)" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="5.5" r="2.6"/><path d="M5.5 17l1.5-6.5h6l1.5 6.5M8 13.5h4"/></svg>
+      <svg class="ic ln" style="left:calc(var(--u)*121);width:calc(var(--u)*10)" viewBox="0 0 10 20" aria-hidden="true"><path d="M2.5 9 5 11.5 7.5 9"/></svg>
+      <hr>
+      <button id="next" aria-label="Next collection"><svg class="ln" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+    </div>
+
+    <div id="steps" role="group" aria-label="Choose collection"></div>
+    <button id="play" aria-label="Pause autoplay" aria-pressed="false"><svg class="ln" viewBox="0 0 20 20" aria-hidden="true"><path id="pi" d="M7 5v10M13 5v10"/></svg></button>
+  </section>
+  <p class="credit">Inspired by <a href="https://dribbble.com/shots/16460483-Cake-Couch" rel="noopener">Cake Couch</a> by Cosmin Capitanu. Original SVG artwork, no copied assets.</p>
+  <footer class="sig">
+    <a class="start" href="https://hamzeh.framer.ai" target="_blank" rel="noopener">&copy; 2026 <strong>Hamzeh</strong></a>
+    <span class="mid">Powered by&nbsp;<strong>Claude</strong></span>
+    <span class="end">
+      <a href="https://github.com/HamzehGhoreyshi/cake-couch-animation" target="_blank" rel="noopener" aria-label="Source code on GitHub, by HamzehGhoreyshi"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><strong>HamzehGhoreyshi</strong></a>
+      <span class="dot" aria-hidden="true">&middot;</span>
+      <a href="https://github.com/HamzehGhoreyshi/cake-couch-animation" target="_blank" rel="noopener" aria-label="Star this project on GitHub"><svg class="star-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg><strong>Star</strong></a>
+    </span>
+  </footer>
+</main>
+
+<!-- shared artwork: gradients, blur filters and symbols, drawn by hand -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+  <filter id="b3" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
+  <filter id="b5" x="-35%" y="-35%" width="170%" height="170%"><feGaussianBlur stdDeviation="5"/></filter>
+  <filter id="b2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2"/></filter>
+  <radialGradient id="gSm" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffd27a"/><stop offset=".7" stop-color="#f6a93c"/><stop offset="1" stop-color="#e48f2a"/></radialGradient>
+  <radialGradient id="gShadow"><stop offset="0" stop-color="#1a1030" stop-opacity=".38"/><stop offset="1" stop-color="#1a1030" stop-opacity="0"/></radialGradient>
+  <!-- sofa -->
+  <linearGradient id="gSB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a083ff"/><stop offset=".3" stop-color="#7b4ffa"/><stop offset=".75" stop-color="#5b33e4"/><stop offset="1" stop-color="#3f20b4"/></linearGradient>
+  <linearGradient id="gSS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a68cff"/><stop offset=".22" stop-color="#7d54fb"/><stop offset=".65" stop-color="#5b34e2"/><stop offset="1" stop-color="#341a9c"/></linearGradient>
+  <radialGradient id="gSC" cx=".42" cy=".38" r=".7"><stop offset="0" stop-color="#7f58fb"/><stop offset=".7" stop-color="#5c34e0"/><stop offset="1" stop-color="#4022b0"/></radialGradient>
+  <radialGradient id="gSE" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#9c7fff"/><stop offset=".6" stop-color="#6d43f4"/><stop offset="1" stop-color="#4422b8"/></radialGradient>
+  <!-- pillow, stool -->
+  <linearGradient id="gPi" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb486"/><stop offset=".45" stop-color="#ff6d45"/><stop offset="1" stop-color="#e2392d"/></linearGradient>
+  <linearGradient id="gSt1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a6cf0"/><stop offset="1" stop-color="#3a2b9f"/></linearGradient>
+  <linearGradient id="gSt2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5a52"/><stop offset="1" stop-color="#c8202e"/></linearGradient>
+  <linearGradient id="gSt3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffa45a"/><stop offset="1" stop-color="#f0602a"/></linearGradient>
+  <radialGradient id="gSt4" cx=".4" cy=".25" r=".8"><stop offset="0" stop-color="#fff6d6"/><stop offset=".45" stop-color="#ffd36a"/><stop offset="1" stop-color="#f4a93a"/></radialGradient>
+  <linearGradient id="gLeg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e88a5c"/><stop offset="1" stop-color="#b85a3a"/></linearGradient>
+  <!-- knot + block -->
+  <linearGradient id="gTu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe2d8"/><stop offset=".45" stop-color="#f8aaa2"/><stop offset="1" stop-color="#e9837f"/></linearGradient>
+  <linearGradient id="gBF" x1="0" y1="0" x2=".3" y2="1"><stop offset="0" stop-color="#ffd24e"/><stop offset=".6" stop-color="#f7b52f"/><stop offset="1" stop-color="#e8951f"/></linearGradient>
+  <linearGradient id="gBS" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a52a"/><stop offset="1" stop-color="#c8741a"/></linearGradient>
+  <radialGradient id="gGold" cx=".36" cy=".3" r=".75"><stop offset="0" stop-color="#fff0c2"/><stop offset=".3" stop-color="#f0c060"/><stop offset=".72" stop-color="#b47a2c"/><stop offset="1" stop-color="#6e4822"/></radialGradient>
+  <radialGradient id="gPink" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#ffe6f7"/><stop offset=".35" stop-color="#f3a6de"/><stop offset=".8" stop-color="#cf72c2"/><stop offset="1" stop-color="#a6509f"/></radialGradient>
+  <radialGradient id="gWarm"><stop offset="0" stop-color="#ff5a3a" stop-opacity=".45"/><stop offset="1" stop-color="#ff5a3a" stop-opacity="0"/></radialGradient>
+  <!-- plant -->
+  <linearGradient id="gLeaf" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a5f26"/><stop offset=".35" stop-color="#8fae58"/><stop offset=".55" stop-color="#7c9c46"/><stop offset="1" stop-color="#2f4e1e"/></linearGradient>
+  <pattern id="pBand" width="6" height="5" patternUnits="userSpaceOnUse"><rect width="6" height="1.5" fill="#24401a" opacity=".2"/></pattern>
+  <linearGradient id="gPot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b6ae9f"/><stop offset=".28" stop-color="#f4f0e7"/><stop offset=".5" stop-color="#ebe6db"/><stop offset=".85" stop-color="#c7c0b2"/><stop offset="1" stop-color="#9c9588"/></linearGradient>
+  <pattern id="pTex" width="5" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".5" fill="#7d7464" opacity=".13"/><circle cx="3.6" cy="2.6" r=".45" fill="#fff" opacity=".4"/><circle cx="2.2" cy="3.4" r=".35" fill="#7d7464" opacity=".1"/></pattern>
+  <linearGradient id="gWood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6e3a1f"/><stop offset=".45" stop-color="#b06a3e"/><stop offset="1" stop-color="#5e301a"/></linearGradient>
+  <radialGradient id="gCloud" cx=".45" cy=".3" r=".8"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#f4f4f6"/><stop offset="1" stop-color="#c9c8d0"/></radialGradient>
+  <linearGradient id="gBean" x1="0" y1="0" x2=".6" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#f4f4f8"/><stop offset="1" stop-color="#c8c8d6"/></linearGradient>
+  <!-- thumbnails -->
+  <linearGradient id="gRed" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff5a46"/><stop offset=".6" stop-color="#e5281f"/><stop offset="1" stop-color="#b8161a"/></linearGradient>
+  <linearGradient id="gBlue" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2b6fe8"/><stop offset=".4" stop-color="#4b8cff"/><stop offset="1" stop-color="#1a4fc0"/></linearGradient>
+  <linearGradient id="gTeal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#11a191"/><stop offset=".45" stop-color="#3fd0bc"/><stop offset="1" stop-color="#0c7d72"/></linearGradient>
+  <linearGradient id="gCoral" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9d8e"/><stop offset="1" stop-color="#ec5a52"/></linearGradient>
+
+  <symbol id="s-sofa" viewBox="0 0 210 124">
+    <ellipse cx="108" cy="114" rx="96" ry="9" fill="url(#gShadow)"/>
+    <rect x="40" y="98" width="4" height="12" rx="2" fill="#1d1430"/><rect x="175" y="96" width="4.5" height="22" rx="2" fill="#1d1430"/>
+    <rect x="4" y="4" width="203" height="64" rx="31" fill="url(#gSB)"/>
+    <rect x="40" y="8" width="140" height="10" rx="5" fill="#c2b0ff" opacity=".35" filter="url(#b3)"/>
+    <ellipse cx="182" cy="36" rx="23" ry="30" fill="url(#gSE)"/>
+    <rect x="30" y="44" width="152" height="16" rx="8" fill="#2a1288" opacity=".5" filter="url(#b3)"/>
+    <ellipse cx="108" cy="58" rx="84" ry="11" fill="#8d6cff"/>
+    <rect x="8" y="56" width="199" height="48" rx="24" fill="url(#gSS)"/>
+    <ellipse cx="106" cy="62" rx="78" ry="5" fill="#b9a6ff" opacity=".35" filter="url(#b2)"/>
+    <ellipse cx="31" cy="36" rx="25" ry="30" fill="url(#gSC)"/>
+    <ellipse cx="31" cy="36" rx="24" ry="29" fill="none" stroke="#9a80ff" stroke-opacity=".5" stroke-width="1.6"/>
+    <ellipse cx="29" cy="38" rx="15" ry="19" fill="#4a26c4" opacity=".35" filter="url(#b3)"/>
+    <path d="M30 100c40 5 120 5 156 0" stroke="#2a1288" stroke-opacity=".35" stroke-width="3" fill="none" filter="url(#b2)"/>
+  </symbol>
+  <symbol id="s-pillow" viewBox="0 0 100 100">
+    <path d="M17 13C40 6 62 5 85 12C94 35 96 62 88 87C64 95 38 96 13 88C5 64 5 38 17 13Z" fill="url(#gPi)"/>
+    <path d="M24 20C42 15 60 15 76 20" stroke="#fff" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <path d="M86 20C90 44 90 64 84 82" stroke="#b5221f" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" fill="none"/>
+  </symbol>
+  <symbol id="s-stool" viewBox="0 0 110 122">
+    <path d="M55 52v60" stroke="#a24a32" stroke-width="5" stroke-linecap="round"/>
+    <path d="M33 50 20 118M78 50l13 68" stroke="url(#gLeg)" stroke-width="5.5" stroke-linecap="round"/>
+    <ellipse cx="55" cy="50" rx="51" ry="13" fill="#2f2390"/>
+    <ellipse cx="55" cy="46" rx="51" ry="13" fill="url(#gSt1)"/>
+    <ellipse cx="55" cy="39" rx="45" ry="12" fill="url(#gSt2)"/>
+    <ellipse cx="55" cy="35" rx="45" ry="11" fill="#ff7a6a" opacity=".5"/>
+    <ellipse cx="55" cy="30" rx="35" ry="11" fill="url(#gSt3)"/>
+    <path d="M30 28C30 12 42 6 55 6S80 12 80 28C72 34 38 34 30 28Z" fill="url(#gSt4)"/>
+  </symbol>
+  <path id="tube" d="M40 100C20 60 30 20 68 22C104 24 98 70 116 76C136 82 136 40 156 42C176 44 174 86 150 106"/>
+  <symbol id="s-knot" viewBox="0 0 196 164">
+    <ellipse cx="92" cy="152" rx="82" ry="13" fill="url(#gWarm)"/>
+    <path d="M140 66 170 56C176 54 179 58 179 64L182 126C182 132 178 136 172 138L148 148Z" fill="url(#gBS)"/>
+    <path d="M30 70C64 60 124 54 152 56L176 50C150 44 76 48 48 58Z" fill="#ffe28e"/>
+    <rect x="14" y="66" width="140" height="86" rx="26" transform="rotate(-6 84 109)" fill="url(#gBF)"/>
+    <path d="M30 72C62 66 110 62 140 62" stroke="#fff1bd" stroke-opacity=".8" stroke-width="3" stroke-linecap="round" fill="none" transform="rotate(-6 84 109)"/>
+    <path d="M30 140C60 140 110 134 146 128" stroke="#c9741a" stroke-opacity=".35" stroke-width="6" stroke-linecap="round" fill="none" filter="url(#b3)"/>
+    <use href="#tube" stroke="#b6474e" stroke-opacity=".4" stroke-width="34" stroke-linecap="round" fill="none" transform="translate(2 8)" filter="url(#b3)"/>
+    <g fill="none" stroke-linecap="round">
+      <use href="#tube" stroke="#e07a7c" stroke-width="34"/>
+      <use href="#tube" stroke="#f5a29c" stroke-width="27" transform="translate(-2 -3)" filter="url(#b2)"/>
+      <use href="#tube" stroke="#ffc9bf" stroke-width="15" transform="translate(-4 -7)" filter="url(#b3)"/>
+      <use href="#tube" stroke="#fff3ee" stroke-width="4" stroke-opacity=".75" transform="translate(-5 -10)" filter="url(#b2)"/>
+    </g>
+  </symbol>
+  <symbol id="s-plant" viewBox="0 0 90 262">
+    <ellipse cx="46" cy="258" rx="36" ry="4" fill="url(#gShadow)"/>
+    <path d="M46 196v56" stroke="#5a2e18" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M24 194 13 256M68 194l11 62" stroke="url(#gWood)" stroke-width="5" stroke-linecap="round"/>
+    <ellipse cx="46" cy="193" rx="30" ry="4.5" fill="#8a4b2a"/>
+    <g id="lv">
+      <path d="M10 128C6 104 6 84 12 62C18 84 20 104 20 128Z"/><path d="M20 128C16 92 18 56 26 28C32 56 32 92 30 128Z"/>
+      <path d="M60 128C62 98 66 70 74 42C76 72 72 100 69 128Z"/><path d="M68 128C70 108 74 90 82 70C82 92 80 110 76 128Z"/>
+      <path d="M31 128C28 86 30 44 37 8C43 44 42 86 41 128Z"/><path d="M52 128C52 90 54 54 60 18C64 54 63 90 61 128Z"/>
+      <path d="M42 128C40 84 42 40 49 0C55 40 54 84 52 128Z"/><path d="M36 128C34 104 36 80 42 58C48 80 48 104 46 128Z"/>
+    </g>
+    <use href="#lv" fill="url(#gLeaf)"/><use href="#lv" fill="url(#pBand)"/>
+    <path d="M8 120H84L79 190Q46 198 13 190Z" fill="url(#gPot)"/>
+    <path d="M8 120H84L79 190Q46 198 13 190Z" fill="url(#pTex)"/>
+    <ellipse cx="46" cy="120" rx="38" ry="5" fill="#ddd6c8"/><ellipse cx="46" cy="120.5" rx="34" ry="3.4" fill="#4a3a28"/>
+  </symbol>
+  <symbol id="s-cloud" viewBox="0 0 160 90">
+    <path d="M18 80C2 80 2 58 20 56C18 36 40 28 54 38C60 16 96 12 106 36C122 28 142 40 136 58C154 60 156 80 138 82Z" fill="url(#gCloud)"/>
+  </symbol>
+  <symbol id="s-bean" viewBox="0 0 70 52">
+    <ellipse cx="34" cy="44" rx="26" ry="5" fill="#1d1030" opacity=".12" filter="url(#b3)"/>
+    <path d="M9 40C1 32 7 19 21 17C33 15 38 6 51 6C64 6 69 18 61 29C51 42 22 50 9 40Z" fill="url(#gBean)"/>
+    <path d="M44 11C52 9 60 12 60 18" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/>
+  </symbol>
+  <symbol id="t-ring" viewBox="0 0 44 52">
+    <ellipse cx="22" cy="40" rx="18" ry="5" fill="url(#gShadow)"/>
+    <path d="M3 24v8c0 5 8 9 19 9s19-4 19-9v-8Z" fill="url(#gSB)"/>
+    <ellipse cx="22" cy="24" rx="19" ry="8" fill="#8a66ff"/><ellipse cx="22" cy="24.5" rx="11" ry="4.2" fill="#3f20b4"/>
+    <path d="M30 18c4 0 6-4 3-6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+  </symbol>
+  <symbol id="t-puri" viewBox="0 0 44 52">
+    <ellipse cx="22" cy="46" rx="13" ry="3" fill="url(#gShadow)"/>
+    <path d="M27 5l5 3v35l-5 2Z" fill="#9e1614"/><rect x="13" y="4" width="15" height="42" rx="2" fill="url(#gRed)"/>
+    <path d="M17 8v34" stroke="#ff8a7a" stroke-width="1.6" opacity=".7"/>
+  </symbol>
+  <symbol id="t-chair" viewBox="0 0 44 52">
+    <ellipse cx="22" cy="48" rx="15" ry="3" fill="url(#gShadow)"/>
+    <path d="M10 26v21M34 26v21M14 28v14M30 28v14M10 40h24" stroke="#a5653c" stroke-width="2" stroke-linecap="round"/>
+    <path d="M12 8h18l2 16H12Z" fill="#d9b48c"/><path d="M8 24h28l-1 6H9Z" fill="#c99868"/><path d="M12 8h18v3H12Z" fill="#f0d2ac"/>
+  </symbol>
+  <symbol id="t-coral" viewBox="0 0 44 52">
+    <ellipse cx="22" cy="48" rx="14" ry="3" fill="url(#gShadow)"/>
+    <path d="M12 6h14a3 3 0 0 1 3 3v17h5a3 3 0 0 1 3 3v17h-6V34H15v12H9V9a3 3 0 0 1 3-3Z" fill="url(#gCoral)"/>
+    <path d="M15 10h10v16H15Z" fill="#c8403c" opacity=".35"/>
+  </symbol>
+  <symbol id="t-pack" viewBox="0 0 44 52">
+    <ellipse cx="22" cy="40" rx="18" ry="5" fill="url(#gShadow)"/>
+    <path d="M3 24v9c0 4 8 7 19 7s19-3 19-7v-9Z" fill="url(#gBlue)"/>
+    <path d="M3 24c0-3 3-2 4-5s4-1 6-3 5 1 9-1 6 0 8 2 5 1 6 4 4 1 4 4c0 5-8 8-19 8S3 29 3 24Z" fill="#3f86ff"/>
+    <ellipse cx="22" cy="23" rx="11" ry="3.4" fill="#1c55c8"/>
+  </symbol>
+  <symbol id="t-lamp" viewBox="0 0 44 52">
+    <ellipse cx="22" cy="47" rx="11" ry="2.6" fill="url(#gShadow)"/>
+    <path d="M16 24h12l3 21H13Z" fill="url(#gTeal)"/>
+    <path d="M10 22c0-10 5-17 13-17s12 7 12 17c-6 3-19 3-25 0Z" fill="#c8f2e8"/><path d="M14 13c2-4 5-5 8-5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+    <path d="M10 22c6 3 19 3 25 0" stroke="#7dd8c4" stroke-width="2" fill="none"/>
+  </symbol>
+  <symbol id="i-sofa" viewBox="0 0 20 20"><path class="ln" d="M4 9V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2M2.5 10a1.5 1.5 0 0 1 3 0v1.5h9V10a1.5 1.5 0 0 1 3 0v4a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1zM5 15v1.5M15 15v1.5"/></symbol>
+  <symbol id="i-pod" viewBox="0 0 20 20"><path class="ln" d="M4 6.5h12M5 6.5v8a1.5 1.5 0 0 0 1.5 1.5h7a1.5 1.5 0 0 0 1.5-1.5v-8M7 4h6"/><circle class="ln" cx="10" cy="11" r="2.4"/></symbol>
+  <symbol id="i-box" viewBox="0 0 20 20"><rect class="ln" x="3.5" y="4.5" width="13" height="12" rx="2"/><path class="ln" d="M3.5 8.5h13M7 3v3M13 3v3"/></symbol>
+</defs>
+</svg>
+
+<script>
+/* ---------- data: the only place content lives ---------- */
+/* hero items: [symbol, x, y, w, h, rotate, blur(0|3|5), depth k, delay s] in 710x482 card units */
+const THEMES = [
+  { name: ["Sofa", "cake"], c1: "#b862f8", c2: "#6a30f0", icon: "i-sofa",    rows: [["Worktop", "s-stool"], ["Couch capsule", "s-pillow"], ["Couch cake", "t-ring"]],
+    hero: [["s-stool", 128, 192, 108, 120, -4, 3, 1.25, .1], ["s-sofa", 176, 128, 212, 125, 0, 0, 1, 0], ["s-pillow", 210, -38, 88, 88, 18, 5, 1.4, .16]] },
+  { name: ["Blob", "sofa"], c1: "#ffd65e", c2: "#f5a03a", icon: "i-pod",    rows: [["Purifier O2", "t-puri"], ["Copse combo", "t-chair"], ["Bouncy prop", "t-coral"]],
+    hero: [["s-knot", 176, 106, 216, 181, -9, 0, 1, 0], ["s-gold", 116, 216, 90, 90, 0, 3, 1.3, .1], ["s-pinkb", 196, 4, 72, 72, 0, 5, 1.45, .18]] },
+  { name: ["Herbs", "pods"], c1: "#4cefd6", c2: "#18d4b6", icon: "i-box",    rows: [["Herbs pods", "s-plant"], ["Garden pack", "t-pack"], ["Outdoor light", "t-lamp"]],
+    hero: [["s-plant", 184, 66, 90, 264, 0, 0, 1, 0], ["s-cloud", 50, 252, 146, 84, 0, 5, 1.3, .12]] }
+];
+
+/* centre of the hidden circle the hero objects orbit, in card units */
+const ORBIT = [104, 128];
+
+const $ = id => document.getElementById(id);
+const card = $("card"), head = $("head"), hero = $("hero"), rows = $("rows"), steps = $("steps");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+const u = n => `calc(var(--u)*${n})`;
+const sym = (id, blur, rot) => {
+  if (id === "s-gold" || id === "s-pinkb") return `<svg viewBox="0 0 100 100"><g filter="url(#b${blur})"><circle cx="50" cy="50" r="46" fill="url(#g${id === "s-gold" ? "Gold" : "Pink"})"/></g></svg>`;
+  const use = `<use href="#${id}" width="100%" height="100%"${rot ? ` style="transform:rotate(${rot}deg);transform-origin:50% 50%;transform-box:view-box"` : ""}/>`;
+  return `<svg>${blur ? `<g filter="url(#b${blur})">${use}</g>` : use}</svg>`;
+};
+
+/* ---------- build every theme once ---------- */
+const layers = THEMES.map((t, ti) => {
+  const h = document.createElement("p");
+  h.className = "ht"; h.innerHTML = t.name.join("<br>");
+  head.append(h);
+  const objs = t.hero.map(([id, x, y, w, ht, r, b, k, d], n) => {
+    const o = document.createElement("div");
+    o.className = "o";
+    o.style.cssText = `left:${u(x)};top:${u(y)};width:${u(w)};height:${u(ht)};--px:${ORBIT[0] - x};--py:${ORBIT[1] - y};--k:${k};--dl:${d}s;--fd:${-(ti * 2 + n * 1.3)}s;--fr:${n % 2 ? -1.5 : 1}deg`;
+    o.innerHTML = `<div>${sym(id, b, r)}</div>`;
+    hero.append(o);
+    return o;
+  });
+  return { h, objs };
+});
+THEMES[0].rows.forEach((_, r) => {
+  const li = document.createElement("li");
+  li.innerHTML = `<div class="win">${THEMES.map(t => `<div class="seg"><b>${t.rows[r][0]}</b><em>110 x 110</em><svg viewBox="0 0 44 52" aria-hidden="true"><use href="#${t.rows[r][1]}"/></svg></div>`).join("")}</div><span class="plus" aria-hidden="true">+</span>`;
+  rows.append(li);
+});
+const segs = [...rows.children].map(li => [...li.querySelectorAll(".seg")]);
+THEMES.forEach((t, i) => {
+  if (i) steps.append(document.createElement("i"));
+  const b = document.createElement("button");
+  b.setAttribute("aria-label", `Show ${t.name.join(" ")}`);
+  b.innerHTML = `<svg viewBox="0 0 20 20" aria-hidden="true"><use href="#${t.icon}"/></svg>`;
+  b.onclick = () => { go(i); schedule(); };
+  steps.append(b);
+});
+const stepBtns = [...steps.querySelectorAll("button")];
+
+/* ---------- state ---------- */
+let cur = -1, timer = 0, paused = false, held = false, cleanup = 0;
+function go(i) {
+  if (i === cur) return;
+  const prev = cur; cur = i;
+  const t = THEMES[i], L = layers[i];
+  clearTimeout(cleanup);
+  layers.forEach((l, k) => { if (k !== prev && k !== i) { l.h.className = "ht"; l.objs.forEach(o => o.className = "o"); segs.forEach(s => s[k].className = "seg"); } });
+  if (prev >= 0) {
+    const P = layers[prev];
+    head.style.setProperty("--d", P.h.offsetWidth + card.offsetWidth * .05 + "px");
+    void head.offsetWidth;
+    P.h.className = "ht old";
+    P.objs.forEach(o => o.className = "o old");
+    segs.forEach(s => s[prev].className = "seg old");
+    cleanup = setTimeout(() => { P.h.className = "ht"; P.objs.forEach(o => o.className = "o"); segs.forEach(s => s[prev].className = "seg"); }, 2000);
+  }
+  L.h.className = "ht cur";
+  L.objs.forEach(o => o.className = "o cur");
+  segs.forEach(s => s[i].className = "seg cur");
+  if (prev >= 0) { turns++; spin(); }
+  card.style.setProperty("--c1", t.c1);
+  card.style.setProperty("--c2", t.c2);
+  stepBtns.forEach((b, k) => b.setAttribute("aria-pressed", k === i));
+}
+
+/* ---------- autoplay: pauses on hover/focus, hidden tab, button, reduced motion ---------- */
+function schedule() {
+  clearTimeout(timer);
+  if (!paused && !held && !reduce.matches && !document.hidden) timer = setTimeout(() => { go((cur + 1) % THEMES.length); schedule(); }, 2600);
+}
+$("next").onclick = () => { go((cur + 1) % THEMES.length); schedule(); };
+$("play").onclick = e => {
+  paused = !paused;
+  const b = e.currentTarget;
+  b.setAttribute("aria-pressed", paused);
+  b.setAttribute("aria-label", paused ? "Resume autoplay" : "Pause autoplay");
+  $("pi").setAttribute("d", paused ? "M7 5l8 5-8 5z" : "M7 5v10M13 5v10");
+  schedule();
+};
+card.addEventListener("pointerenter", () => { held = true; schedule(); });
+card.addEventListener("pointerleave", () => { held = false; schedule(); });
+card.addEventListener("focusin", () => { held = true; schedule(); });
+card.addEventListener("focusout", () => { held = false; schedule(); });
+document.addEventListener("visibilitychange", schedule);
+reduce.addEventListener("change", schedule);
+/* ---------- background pentagon: rotates 144deg (= 2 sides) per theme, always clockwise ----------
+   a regular pentagon looks identical every 72deg, so every theme rests on the same silhouette.
+   Rounded corners = a thick stroke with round joins around a smaller pentagon. */
+const bsq = $("bsq"), bsvg = $("blob"), mobile = matchMedia("(max-width: 640px)");
+const TILT = 10, STEP = 144;
+let turns = 0;
+const spin = () => { bsq.style.transform = `rotate(${TILT + turns * STEP}deg)`; };
+function layoutBlob() {                      // desktop: 710x482 card, phone: 343x300 blob panel
+  const m = mobile.matches, o = m ? [150, 100] : [104, 128], a = m ? 170 : 190, r = 70 * (m ? .86 : 1);
+  const R = (a - r) / Math.cos(Math.PI / 5);          // inner pentagon radius (flat side faces right)
+  const pts = [-36, 36, 108, 180, 252].map(d => [o[0] + R * Math.cos(d * Math.PI / 180), o[1] + R * Math.sin(d * Math.PI / 180)]);
+  bsvg.setAttribute("viewBox", m ? "0 0 343 300" : "0 0 710 482");
+  bsq.setAttribute("points", pts.map(q => q.map(n => n.toFixed(1)).join(",")).join(" "));
+  bsq.setAttribute("stroke-width", r * 2);
+  for (const el of [bsq, bsq.parentNode]) el.style.transformOrigin = `${o[0]}px ${o[1]}px`;
+  bsq.style.transition = "none"; spin(); void bsq.getBoundingClientRect(); bsq.style.transition = "";
+}
+mobile.addEventListener("change", layoutBlob);
+layoutBlob();
+go(0);
+schedule();
+</script>
+</body>
+</html>
