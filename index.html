@@ -339,16 +339,20 @@ svg { overflow: visible; }
     <path d="M46 196v56" stroke="#5a2e18" stroke-width="4.5" stroke-linecap="round"/>
     <path d="M24 194 13 256M68 194l11 62" stroke="url(#gWood)" stroke-width="5" stroke-linecap="round"/>
     <ellipse cx="46" cy="193" rx="30" ry="4.5" fill="#8a4b2a"/>
-    <g id="lv">
-      <path d="M10 128C6 104 6 84 12 62C18 84 20 104 20 128Z"/><path d="M20 128C16 92 18 56 26 28C32 56 32 92 30 128Z"/>
-      <path d="M60 128C62 98 66 70 74 42C76 72 72 100 69 128Z"/><path d="M68 128C70 108 74 90 82 70C82 92 80 110 76 128Z"/>
-      <path d="M31 128C28 86 30 44 37 8C43 44 42 86 41 128Z"/><path d="M52 128C52 90 54 54 60 18C64 54 63 90 61 128Z"/>
-      <path d="M42 128C40 84 42 40 49 0C55 40 54 84 52 128Z"/><path d="M36 128C34 104 36 80 42 58C48 80 48 104 46 128Z"/>
-    </g>
-    <use href="#lv" fill="url(#gLeaf)"/><use href="#lv" fill="url(#pBand)"/>
     <path d="M8 120H84L79 190Q46 198 13 190Z" fill="url(#gPot)"/>
     <path d="M8 120H84L79 190Q46 198 13 190Z" fill="url(#pTex)"/>
     <ellipse cx="46" cy="120" rx="38" ry="5" fill="#ddd6c8"/><ellipse cx="46" cy="120.5" rx="34" ry="3.4" fill="#4a3a28"/>
+    <clipPath id="cSoil"><rect width="90" height="120"/><ellipse cx="46" cy="120.5" rx="34" ry="3.4"/></clipPath>
+    <g clip-path="url(#cSoil)">
+    <g id="lv">
+      <path d="M14 125C8 104 8 84 14 62C20 84 22 104 23 125Z"/><path d="M20 125C16 92 18 56 26 28C32 56 32 92 30 125Z"/>
+      <path d="M60 125C62 98 66 70 74 42C76 72 72 100 69 125Z"/><path d="M67 125C70 108 74 90 82 70C82 92 80 110 76 125Z"/>
+      <path d="M31 125C28 86 30 44 37 8C43 44 42 86 41 125Z"/><path d="M52 125C52 90 54 54 60 18C64 54 63 90 61 125Z"/>
+      <path d="M42 125C40 84 42 40 49 0C55 40 54 84 52 125Z"/><path d="M36 125C34 104 36 80 42 58C48 80 48 104 46 125Z"/>
+    </g>
+    <use href="#lv" fill="url(#gLeaf)"/><use href="#lv" fill="url(#pBand)"/>
+    </g>
+    <path d="M8 120A38 5 0 0 0 84 120H80A34 3.4 0 0 1 12 120.5Z" fill="#ddd6c8"/>
   </symbol>
   <symbol id="s-cloud" viewBox="0 0 160 90">
     <path d="M18 80C2 80 2 58 20 56C18 36 40 28 54 38C60 16 96 12 106 36C122 28 142 40 136 58C154 60 156 80 138 82Z" fill="url(#gCloud)"/>
