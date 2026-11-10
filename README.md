@@ -7,11 +7,11 @@
 A tiny, dependency-free animated product showcase: one HTML file with inline CSS, JS and hand-drawn SVG. No framework, no fonts, no images, no build step (about 12 KB gzipped).
 
 <p align="center">
-  <img src="docs/cake-couch.gif" width="80%" alt="The three themes (Sofa cake, Blob sofa, Herbs pods) cycling: objects swing around a hidden circle while the rounded pentagon behind them rotates and changes colour">
+  <img src="docs/cake-couch.gif" width="80%" alt="The three themes (Sofa cake, Blob sofa, Snake plant) cycling: objects swing around a hidden circle while the rounded pentagon behind them rotates and changes colour">
 </p>
 
 ## How it moves
-- Three themes (Sofa cake, Blob sofa, Herbs pods) cycle on a loop.
+- Three themes (Sofa cake, Blob sofa, Snake plant) cycle on a loop.
 - Every object rides one hidden circle, clockwise. The old set sweeps out to the bottom-left while the new set swings in from the top; blurred foreground objects travel further, which gives depth.
 - The coloured background is a rounded pentagon that rotates 144° per theme about the same centre. The card clips it, so its visible outline keeps changing while the colour morphs.
 - The headline and the product rows slide out left as a strip and the new ones follow right behind.
