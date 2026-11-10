@@ -1,14 +1,14 @@
 # Cake Couch
 
-![Cake Couch: animated product showcase](docs/screenshot.jpg)
+<p align="center">
+  <img src="docs/cake-couch.gif" width="100%" alt="Cake Couch animation: the three themes (Sofa cake, Blob sofa, Herbs pods) cycling; objects swing around a hidden circle while the rounded pentagon behind them rotates and changes colour">
+</p>
 
 **Live:** https://cake-couch-animation.vercel.app
 
 A tiny, dependency-free animated product showcase: one HTML file with inline CSS, JS and hand-drawn SVG. No framework, no fonts, no images, no build step (about 12 KB gzipped).
 
-<p align="center">
-  <img src="docs/cake-couch.gif" width="80%" alt="The three themes (Sofa cake, Blob sofa, Herbs pods) cycling: objects swing around a hidden circle while the rounded pentagon behind them rotates and changes colour">
-</p>
+![Cake Couch: Sofa cake theme](docs/screenshot.jpg)
 
 ## How it moves
 - Three themes (Sofa cake, Blob sofa, Herbs pods) cycle on a loop.
@@ -27,6 +27,6 @@ Then open http://localhost:4173.
 | File | What it holds |
 |---|---|
 | `index.html` | Everything: markup, styles, SVG artwork and the small script |
-| `docs/` | README picture and animation |
+| `docs/` | README animation (`cake-couch.gif`, recorded from the live page) and picture (`screenshot.jpg`) |
 
 Inspired by [Cake Couch](https://dribbble.com/shots/16460483-Cake-Couch) by Cosmin Capitanu. All artwork here is original SVG; no assets were copied.
