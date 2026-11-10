@@ -117,5 +117,10 @@ function layoutBlob() {                      // desktop: 710x482 card, phone: 34
 }
 mobile.addEventListener("change", layoutBlob);
 layoutBlob();
-go(0);
-schedule();
+
+/* ---------- artwork lives in art.svg; inline it once, then start ---------- */
+fetch("art.svg").then(r => r.ok ? r.text() : "").catch(() => "").then(svg => {
+  document.body.insertAdjacentHTML("beforeend", svg);
+  go(0);
+  schedule();
+});

@@ -6,7 +6,7 @@
 
 **Live:** https://cake-couch-animation.vercel.app
 
-A tiny, dependency-free animated product showcase in plain HTML, CSS and JavaScript with hand-drawn SVG. No framework, no fonts, no images, no build step (about 12 KB gzipped).
+A tiny, dependency-free animated product showcase in plain HTML, CSS and JavaScript, with hand-drawn SVG artwork. No framework, no fonts, no images, no build step (about 12 KB gzipped).
 
 ![Cake Couch: Sofa cake theme](docs/screenshot.jpg)
 
@@ -26,9 +26,10 @@ Then open http://localhost:4173.
 ## Files
 | File | What it holds |
 |---|---|
-| `index.html` | Markup and the SVG artwork (symbols reused by the hero and the list) |
+| `index.html` | Markup only: card, list, controls, footer, share tags |
+| `art.svg` | All artwork: gradients, blur filters and symbols, drawn by hand (preloaded, then inlined by `app.js`) |
 | `style.css` | Layout, theme colours and all motion (CSS transitions and keyframes) |
-| `app.js` | Builds the themes, runs the orbit, pentagon turn and autoplay |
+| `app.js` | Theme data; builds the hero and list, runs the orbit, pentagon turn and autoplay |
 | `og-image.jpg` | Social share picture (1200x630) |
 | `docs/` | README animation (`cake-couch.gif`, recorded from the live page) and picture (`screenshot.jpg`) |
 

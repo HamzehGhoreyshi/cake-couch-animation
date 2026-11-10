@@ -1,0 +1,148 @@
+<!-- shared artwork: gradients, blur filters and symbols, drawn by hand. app.js inlines this file so every url(#id) and <use href="#id"> resolves. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+  <filter id="b3" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
+  <filter id="b5" x="-35%" y="-35%" width="170%" height="170%"><feGaussianBlur stdDeviation="5"/></filter>
+  <filter id="b2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2"/></filter>
+  <radialGradient id="gSm" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffd27a"/><stop offset=".7" stop-color="#f6a93c"/><stop offset="1" stop-color="#e48f2a"/></radialGradient>
+  <radialGradient id="gShadow"><stop offset="0" stop-color="#1a1030" stop-opacity=".38"/><stop offset="1" stop-color="#1a1030" stop-opacity="0"/></radialGradient>
+  <!-- sofa -->
+  <linearGradient id="gSB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a083ff"/><stop offset=".3" stop-color="#7b4ffa"/><stop offset=".75" stop-color="#5b33e4"/><stop offset="1" stop-color="#3f20b4"/></linearGradient>
+  <linearGradient id="gSS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a68cff"/><stop offset=".22" stop-color="#7d54fb"/><stop offset=".65" stop-color="#5b34e2"/><stop offset="1" stop-color="#341a9c"/></linearGradient>
+  <radialGradient id="gSC" cx=".42" cy=".38" r=".7"><stop offset="0" stop-color="#7f58fb"/><stop offset=".7" stop-color="#5c34e0"/><stop offset="1" stop-color="#4022b0"/></radialGradient>
+  <radialGradient id="gSE" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#9c7fff"/><stop offset=".6" stop-color="#6d43f4"/><stop offset="1" stop-color="#4422b8"/></radialGradient>
+  <!-- pillow, stool -->
+  <linearGradient id="gPi" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb486"/><stop offset=".45" stop-color="#ff6d45"/><stop offset="1" stop-color="#e2392d"/></linearGradient>
+  <linearGradient id="gSt1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a6cf0"/><stop offset="1" stop-color="#3a2b9f"/></linearGradient>
+  <linearGradient id="gSt2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5a52"/><stop offset="1" stop-color="#c8202e"/></linearGradient>
+  <linearGradient id="gSt3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffa45a"/><stop offset="1" stop-color="#f0602a"/></linearGradient>
+  <radialGradient id="gSt4" cx=".4" cy=".25" r=".8"><stop offset="0" stop-color="#fff6d6"/><stop offset=".45" stop-color="#ffd36a"/><stop offset="1" stop-color="#f4a93a"/></radialGradient>
+  <linearGradient id="gLeg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e88a5c"/><stop offset="1" stop-color="#b85a3a"/></linearGradient>
+  <!-- knot + block -->
+  <linearGradient id="gTu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe2d8"/><stop offset=".45" stop-color="#f8aaa2"/><stop offset="1" stop-color="#e9837f"/></linearGradient>
+  <linearGradient id="gBF" x1="0" y1="0" x2=".3" y2="1"><stop offset="0" stop-color="#ffd24e"/><stop offset=".6" stop-color="#f7b52f"/><stop offset="1" stop-color="#e8951f"/></linearGradient>
+  <linearGradient id="gBS" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a52a"/><stop offset="1" stop-color="#c8741a"/></linearGradient>
+  <radialGradient id="gGold" cx=".36" cy=".3" r=".75"><stop offset="0" stop-color="#fff0c2"/><stop offset=".3" stop-color="#f0c060"/><stop offset=".72" stop-color="#b47a2c"/><stop offset="1" stop-color="#6e4822"/></radialGradient>
+  <radialGradient id="gPink" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#ffe6f7"/><stop offset=".35" stop-color="#f3a6de"/><stop offset=".8" stop-color="#cf72c2"/><stop offset="1" stop-color="#a6509f"/></radialGradient>
+  <radialGradient id="gWarm"><stop offset="0" stop-color="#ff5a3a" stop-opacity=".45"/><stop offset="1" stop-color="#ff5a3a" stop-opacity="0"/></radialGradient>
+  <!-- plant -->
+  <linearGradient id="gLeaf" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a5f26"/><stop offset=".35" stop-color="#8fae58"/><stop offset=".55" stop-color="#7c9c46"/><stop offset="1" stop-color="#2f4e1e"/></linearGradient>
+  <pattern id="pBand" width="6" height="5" patternUnits="userSpaceOnUse"><rect width="6" height="1.5" fill="#24401a" opacity=".2"/></pattern>
+  <linearGradient id="gPot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b6ae9f"/><stop offset=".28" stop-color="#f4f0e7"/><stop offset=".5" stop-color="#ebe6db"/><stop offset=".85" stop-color="#c7c0b2"/><stop offset="1" stop-color="#9c9588"/></linearGradient>
+  <pattern id="pTex" width="5" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".5" fill="#7d7464" opacity=".13"/><circle cx="3.6" cy="2.6" r=".45" fill="#fff" opacity=".4"/><circle cx="2.2" cy="3.4" r=".35" fill="#7d7464" opacity=".1"/></pattern>
+  <linearGradient id="gWood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6e3a1f"/><stop offset=".45" stop-color="#b06a3e"/><stop offset="1" stop-color="#5e301a"/></linearGradient>
+  <radialGradient id="gCloud" cx=".45" cy=".3" r=".8"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#f4f4f6"/><stop offset="1" stop-color="#c9c8d0"/></radialGradient>
+  <linearGradient id="gBean" x1="0" y1="0" x2=".6" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#f4f4f8"/><stop offset="1" stop-color="#c8c8d6"/></linearGradient>
+  <!-- thumbnails -->
+  <linearGradient id="gBlue" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2b6fe8"/><stop offset=".4" stop-color="#4b8cff"/><stop offset="1" stop-color="#1a4fc0"/></linearGradient>
+  <linearGradient id="gTeal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#11a191"/><stop offset=".45" stop-color="#3fd0bc"/><stop offset="1" stop-color="#0c7d72"/></linearGradient>
+
+  <symbol id="s-sofa" viewBox="0 0 210 124">
+    <ellipse cx="108" cy="114" rx="96" ry="9" fill="url(#gShadow)"/>
+    <rect x="40" y="98" width="4" height="12" rx="2" fill="#1d1430"/><rect x="175" y="96" width="4.5" height="22" rx="2" fill="#1d1430"/>
+    <rect x="4" y="4" width="203" height="64" rx="31" fill="url(#gSB)"/>
+    <rect x="40" y="8" width="140" height="10" rx="5" fill="#c2b0ff" opacity=".35" filter="url(#b3)"/>
+    <ellipse cx="182" cy="36" rx="23" ry="30" fill="url(#gSE)"/>
+    <rect x="30" y="44" width="152" height="16" rx="8" fill="#2a1288" opacity=".5" filter="url(#b3)"/>
+    <ellipse cx="108" cy="58" rx="84" ry="11" fill="#8d6cff"/>
+    <rect x="8" y="56" width="199" height="48" rx="24" fill="url(#gSS)"/>
+    <ellipse cx="106" cy="62" rx="78" ry="5" fill="#b9a6ff" opacity=".35" filter="url(#b2)"/>
+    <ellipse cx="31" cy="36" rx="25" ry="30" fill="url(#gSC)"/>
+    <ellipse cx="31" cy="36" rx="24" ry="29" fill="none" stroke="#9a80ff" stroke-opacity=".5" stroke-width="1.6"/>
+    <ellipse cx="29" cy="38" rx="15" ry="19" fill="#4a26c4" opacity=".35" filter="url(#b3)"/>
+    <path d="M30 100c40 5 120 5 156 0" stroke="#2a1288" stroke-opacity=".35" stroke-width="3" fill="none" filter="url(#b2)"/>
+  </symbol>
+  <symbol id="s-pillow" viewBox="0 0 100 100">
+    <path d="M17 13C40 6 62 5 85 12C94 35 96 62 88 87C64 95 38 96 13 88C5 64 5 38 17 13Z" fill="url(#gPi)"/>
+    <path d="M24 20C42 15 60 15 76 20" stroke="#fff" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <path d="M86 20C90 44 90 64 84 82" stroke="#b5221f" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" fill="none"/>
+  </symbol>
+  <symbol id="s-stool" viewBox="0 0 110 122">
+    <path d="M55 52v60" stroke="#a24a32" stroke-width="5" stroke-linecap="round"/>
+    <path d="M33 50 20 118M78 50l13 68" stroke="url(#gLeg)" stroke-width="5.5" stroke-linecap="round"/>
+    <ellipse cx="55" cy="50" rx="51" ry="13" fill="#2f2390"/>
+    <ellipse cx="55" cy="46" rx="51" ry="13" fill="url(#gSt1)"/>
+    <ellipse cx="55" cy="39" rx="45" ry="12" fill="url(#gSt2)"/>
+    <ellipse cx="55" cy="35" rx="45" ry="11" fill="#ff7a6a" opacity=".5"/>
+    <ellipse cx="55" cy="30" rx="35" ry="11" fill="url(#gSt3)"/>
+    <path d="M30 28C30 12 42 6 55 6S80 12 80 28C72 34 38 34 30 28Z" fill="url(#gSt4)"/>
+  </symbol>
+  <path id="tube" d="M36 122C20 108 16 78 32 62C52 42 148 42 168 62C184 78 180 108 164 122"/>
+  <linearGradient id="gTuD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9a39a"/><stop offset=".55" stop-color="#e99a6e"/><stop offset="1" stop-color="#e0902c"/></linearGradient>
+  <linearGradient id="gTuM" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f8cdc5"/><stop offset=".5" stop-color="#f6bc9e"/><stop offset="1" stop-color="#f5b83f"/></linearGradient>
+  <linearGradient id="gTuL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0eb"/><stop offset=".55" stop-color="#ffdcc6"/><stop offset="1" stop-color="#ffd877"/></linearGradient>
+  <radialGradient id="gEnd" cx=".42" cy=".38" r=".7"><stop offset="0" stop-color="#ffe183"/><stop offset=".7" stop-color="#f8c440"/><stop offset="1" stop-color="#e9a227"/></radialGradient>
+  <symbol id="s-knot" viewBox="0 0 196 164">
+    <ellipse cx="100" cy="154" rx="86" ry="10" fill="url(#gWarm)"/>
+    <rect x="30" y="72" width="140" height="36" rx="16" fill="#ffe07a"/>
+    <rect x="26" y="92" width="148" height="60" rx="24" fill="url(#gBF)"/>
+    <path d="M44 98C80 94 120 94 156 98" stroke="#fff1bd" stroke-opacity=".7" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M46 148C80 152 120 152 154 148" stroke="#c9741a" stroke-opacity=".3" stroke-width="6" stroke-linecap="round" fill="none" filter="url(#b3)"/>
+    <use href="#tube" stroke="#c46a2a" stroke-opacity=".35" stroke-width="32" stroke-linecap="round" fill="none" transform="translate(2 8)" filter="url(#b3)"/>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <use href="#tube" stroke="url(#gTuD)" stroke-width="32"/>
+      <use href="#tube" stroke="url(#gTuM)" stroke-width="25" transform="translate(-2 -3)" filter="url(#b2)"/>
+      <use href="#tube" stroke="url(#gTuL)" stroke-width="13" transform="translate(-4 -7)" filter="url(#b3)"/>
+      <use href="#tube" stroke="#fff8f4" stroke-width="4" stroke-opacity=".7" transform="translate(-5 -10)" filter="url(#b2)"/>
+    </g>
+  </symbol>
+  <symbol id="s-plant" viewBox="0 0 90 262">
+    <ellipse cx="46" cy="258" rx="36" ry="4" fill="url(#gShadow)"/>
+    <path d="M46 196v56" stroke="#5a2e18" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M24 194 13 256M68 194l11 62" stroke="url(#gWood)" stroke-width="5" stroke-linecap="round"/>
+    <ellipse cx="46" cy="193" rx="30" ry="4.5" fill="#8a4b2a"/>
+    <path d="M8 120H84L79 190Q46 198 13 190Z" fill="url(#gPot)"/>
+    <path d="M8 120H84L79 190Q46 198 13 190Z" fill="url(#pTex)"/>
+    <ellipse cx="46" cy="120" rx="38" ry="5" fill="#ddd6c8"/><ellipse cx="46" cy="120.5" rx="34" ry="3.4" fill="#4a3a28"/>
+    <clipPath id="cSoil"><rect width="90" height="120"/><ellipse cx="46" cy="120.5" rx="34" ry="3.4"/></clipPath>
+    <g clip-path="url(#cSoil)">
+    <g id="lv">
+      <path d="M14 125C8 104 8 84 14 62C20 84 22 104 23 125Z"/><path d="M20 125C16 92 18 56 26 28C32 56 32 92 30 125Z"/>
+      <path d="M60 125C62 98 66 70 74 42C76 72 72 100 69 125Z"/><path d="M67 125C70 108 74 90 82 70C82 92 80 110 76 125Z"/>
+      <path d="M31 125C28 86 30 44 37 8C43 44 42 86 41 125Z"/><path d="M52 125C52 90 54 54 60 18C64 54 63 90 61 125Z"/>
+      <path d="M42 125C40 84 42 40 49 0C55 40 54 84 52 125Z"/><path d="M36 125C34 104 36 80 42 58C48 80 48 104 46 125Z"/>
+    </g>
+    <use href="#lv" fill="url(#gLeaf)"/><use href="#lv" fill="url(#pBand)"/>
+    </g>
+    <path d="M8 120A38 5 0 0 0 84 120H80A34 3.4 0 0 1 12 120.5Z" fill="#ddd6c8"/>
+  </symbol>
+  <linearGradient id="gBrass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a4e1c"/><stop offset=".45" stop-color="#f0c060"/><stop offset="1" stop-color="#7a4e1c"/></linearGradient>
+  <symbol id="s-table" viewBox="0 0 100 100">
+    <ellipse cx="50" cy="93" rx="34" ry="5" fill="url(#gShadow)"/>
+    <ellipse cx="50" cy="87" rx="24" ry="6" fill="url(#gBrass)"/>
+    <rect x="45" y="34" width="10" height="53" rx="4" fill="url(#gBrass)"/>
+    <ellipse cx="50" cy="37" rx="45" ry="12" fill="#8a5a20"/>
+    <ellipse cx="50" cy="33" rx="45" ry="12" fill="url(#gGold)"/>
+  </symbol>
+  <symbol id="s-lamp2" viewBox="0 0 100 110">
+    <ellipse cx="50" cy="105" rx="26" ry="4" fill="url(#gShadow)"/>
+    <ellipse cx="50" cy="100" rx="20" ry="5" fill="url(#gBrass)"/>
+    <rect x="47" y="52" width="6" height="48" rx="3" fill="url(#gBrass)"/>
+    <path d="M14 56C14 22 30 8 50 8S86 22 86 56Z" fill="url(#gPink)"/>
+    <ellipse cx="50" cy="56" rx="36" ry="6" fill="#a6509f"/><ellipse cx="50" cy="56" rx="30" ry="4" fill="#ffe6a8"/>
+  </symbol>
+  <symbol id="s-cloud" viewBox="0 0 160 90">
+    <path d="M18 80C2 80 2 58 20 56C18 36 40 28 54 38C60 16 96 12 106 36C122 28 142 40 136 58C154 60 156 80 138 82Z" fill="url(#gCloud)"/>
+  </symbol>
+  <symbol id="s-bean" viewBox="0 0 70 52">
+    <ellipse cx="34" cy="44" rx="26" ry="5" fill="#1d1030" opacity=".12" filter="url(#b3)"/>
+    <path d="M9 40C1 32 7 19 21 17C33 15 38 6 51 6C64 6 69 18 61 29C51 42 22 50 9 40Z" fill="url(#gBean)"/>
+    <path d="M44 11C52 9 60 12 60 18" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/>
+  </symbol>
+  <symbol id="t-pack" viewBox="0 0 44 52">
+    <ellipse cx="22" cy="40" rx="18" ry="5" fill="url(#gShadow)"/>
+    <path d="M3 24v9c0 4 8 7 19 7s19-3 19-7v-9Z" fill="url(#gBlue)"/>
+    <path d="M3 24c0-3 3-2 4-5s4-1 6-3 5 1 9-1 6 0 8 2 5 1 6 4 4 1 4 4c0 5-8 8-19 8S3 29 3 24Z" fill="#3f86ff"/>
+    <ellipse cx="22" cy="23" rx="11" ry="3.4" fill="#1c55c8"/>
+  </symbol>
+  <symbol id="t-lamp" viewBox="0 0 44 52">
+    <ellipse cx="22" cy="47" rx="11" ry="2.6" fill="url(#gShadow)"/>
+    <path d="M16 24h12l3 21H13Z" fill="url(#gTeal)"/>
+    <path d="M10 22c0-10 5-17 13-17s12 7 12 17c-6 3-19 3-25 0Z" fill="#c8f2e8"/><path d="M14 13c2-4 5-5 8-5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+    <path d="M10 22c6 3 19 3 25 0" stroke="#7dd8c4" stroke-width="2" fill="none"/>
+  </symbol>
+  <symbol id="i-sofa" viewBox="0 0 20 20"><path class="ln" d="M4 9V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2M2.5 10a1.5 1.5 0 0 1 3 0v1.5h9V10a1.5 1.5 0 0 1 3 0v4a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1zM5 15v1.5M15 15v1.5"/></symbol>
+  <symbol id="i-pod" viewBox="0 0 20 20"><path class="ln" d="M4 6.5h12M5 6.5v8a1.5 1.5 0 0 0 1.5 1.5h7a1.5 1.5 0 0 0 1.5-1.5v-8M7 4h6"/><circle class="ln" cx="10" cy="11" r="2.4"/></symbol>
+  <symbol id="i-box" viewBox="0 0 20 20"><rect class="ln" x="3.5" y="4.5" width="13" height="12" rx="2"/><path class="ln" d="M3.5 8.5h13M7 3v3M13 3v3"/></symbol>
+</defs>
+</svg>
