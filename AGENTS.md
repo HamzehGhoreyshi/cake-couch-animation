@@ -14,6 +14,7 @@ Project summary lives in: `~/Desktop/AI/ai-os/10_context/projects/cake-couch-ani
 - How to run it: `python3 -m http.server 4173` in this folder, open http://localhost:4173. (The app's preview launcher cannot read ~/Desktop, so use a terminal tab.)
 - How to deploy it: `vercel deploy --prod --yes` (live at https://cake-couch-animation.vercel.app), then `git push` to HamzehGhoreyshi/cake-couch-animation.
 - Rules specific to this project:
+  - Portfolio link: the published page must show a visible link to `https://hamzeh.framer.ai/?utm_source=cake-couch-animation&utm_medium=referral`. Check it is there before every deploy.
   - Never copy, embed or hotlink the author's videos or images. All artwork stays original SVG.
   - Keep the "Inspired by Cake Couch by Cosmin Capitanu" credit and the signature footer (© Hamzeh · Powered by Claude · GitHub · Star).
   - Motion model (measured from the shot): objects ride one hidden circle (centre ~104,128 in 710x482 card units), clockwise; the background is a rounded pentagon that rotates 144° per theme about the same centre, clipped by the card. Change these only by re-measuring the shot.
